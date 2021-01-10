@@ -1,0 +1,29 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="initial-scale=1, maximum-scale=1")
+    link(rel="stylesheet", href="main.scss")
+    title Test 2
+  body
+    .app
+      .app__container
+        table#user-table.table
+          thead.table__head
+            tr.table__row
+              th.table__cell Имя
+              th.table__cell Телефон
+              th.table__cell Управление
+          tbody.table__body
+
+        p.empty-table Данных нет
+
+        .add-user
+          label.label
+            | Имя
+            input.input
+          label.label
+            | Телефон
+            input.input
+          button.button Добавить
+    script(src="./js/main.js")

@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+$layout-background: #f4f4f4;
+$element-background: #ffffff;
+$text: #3c3b3b;
+$active: #2ebaae;
+$border: 1px solid #e3e3e3;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.app {
+  background: $layout-background;
+  color: $text;
+  height: 100vh;
+  display: grid;
+  justify-items: center;
+  padding: 80px 20px;
+
+  &__container {
+    width: 1000px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.empty-table {
+  font-size: 20px;
+  text-align: center;
+  margin: 20px 0;
+
+  &--hide {
+    display: none;
+  }
+}
+
+.table {
+  width: 100%;
+  background: $element-background;
+  border: $border;
+  border-spacing: 0;
+
+  &__head {
+    text-transform: uppercase;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 2fr 2fr 3fr;
+  }
+
+  &__cell {
+    font-size: 18px;
+    padding: 0 16px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-weight: normal;
+
+    &:not(:last-child) {
+      border-right: $border;
+    }
+  }
+}
+
+.input {
+  padding: 8px 16px;
+  font-size: 18px;
+  border-radius: 0;
+  border: $border;
+  outline-color: $active;
+  font-family: 'Roboto', sans-serif;
+
+  &:focus, &:active {
+    color: $active;
+    border-color: $active;
+  }
+}
+
+.button {
+  padding: 8px 16px;
+  font-size: 18px;
+  border: $border;
+  display: inline-block;
+  background: $element-background;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline-color: $active;
+  font-family: 'Roboto', sans-serif;
+  margin-right: auto;
+
+  &:hover, &:focus, &:active {
+    color: $active;
+    border-color: $active;
+  }
+}
+
+.label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-gap: 16px;
+  align-items: center;
+}
+
+.add-user {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr auto;
+  grid-gap: 32px;
+  margin: 20px auto;
+}
+
