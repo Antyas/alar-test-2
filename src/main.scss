@@ -33,7 +33,7 @@ body {
   }
 }
 
-.empty-table {
+.empty-string {
   font-size: 20px;
   text-align: center;
   margin: 20px 0;
@@ -51,11 +51,18 @@ body {
 
   &__head {
     text-transform: uppercase;
+    border-bottom: $border;
+    border-width: 4px;
+    display: block;
   }
 
   &__row {
     display: grid;
     grid-template-columns: 2fr 2fr 3fr;
+
+    &:not(:last-child) {
+      border-bottom: $border;
+    }
   }
 
   &__cell {
@@ -65,11 +72,24 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
     font-weight: normal;
 
     &:not(:last-child) {
       border-right: $border;
+    }
+
+    &-control {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 16px;
+      
+      .button {
+        width: 100%;
+      }
+    }
+
+    .input {
+      text-align: center;
     }
   }
 }
@@ -90,7 +110,7 @@ body {
 
 .button {
   padding: 8px 16px;
-  font-size: 18px;
+  font-size: 14px;
   border: $border;
   display: inline-block;
   background: $element-background;

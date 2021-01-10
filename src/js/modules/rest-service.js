@@ -1,10 +1,12 @@
 /* 
-отлов ошибок по идее должен быть в инстансе аксиоса 
-или в своей оболочке над fetch, 
-так что тут в фейковом апи не буду асинхронные функции оборачивать в try-catch
+  отлов ошибок по идее должен быть в инстансе аксиоса 
+  или в своей оболочке над fetch, 
+  так что тут в фейковом апи не буду асинхронные функции оборачивать в try-catch
 */
 
 class RestService {
+  name = 'rest';
+
   #backendData = {
     counter: 3,
     users: [
@@ -16,7 +18,7 @@ class RestService {
   }
 
   #delay() {
-    return new Promise((resolve) => setTimeout(resolve, 1000));
+    return new Promise((resolve) => setTimeout(resolve, 500));
   }
 
   async getUsers() {

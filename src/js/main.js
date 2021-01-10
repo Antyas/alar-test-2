@@ -1,5 +1,6 @@
 import App from './app';
-import RestService from './rest-service';
+import components from './components/index.js';
+import modules from './modules/index.js';
 
-const rest = new RestService();
-const app = new App({ rest });
+const app = new App(modules, components);
+app.run();
