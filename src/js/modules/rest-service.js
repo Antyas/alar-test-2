@@ -4,7 +4,7 @@
   так что тут в фейковом апи не буду асинхронные функции оборачивать в try-catch
 */
 
-class RestService {
+class RestModule {
   name = 'rest';
 
   #backendData = {
@@ -48,4 +48,4 @@ class RestService {
   }
 }
 
-export default RestService;
+export default RestModule;

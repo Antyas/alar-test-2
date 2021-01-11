@@ -1,9 +1,9 @@
 import Logger  from './logger';
-import RestService from './rest-service';
+import RestModule from './rest-module';
 import Store from './store'
 
 export default {
   Logger,
-  RestService,
+  RestModule,
   Store,
 };
