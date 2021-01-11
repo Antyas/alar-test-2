@@ -5,8 +5,8 @@
   "main": "",
   "type": "module",
   "scripts": {
-    "dev": "parcel ./src/index.pug",
-    "build": "parcel build ./src/index.pug"
+    "dev": "parcel ./src/index.pug --no-cache",
+    "build": "parcel build ./src/index.pug --no-cache"
   },
   "keywords": [],
   "author": "",
