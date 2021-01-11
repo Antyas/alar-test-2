@@ -6,12 +6,12 @@ class AddUserForm {
     this.phoneInput = this.form.querySelector('.input[data-key=phone]');
     this.button = this.form.querySelector('.button');
 
-    this.form.addEventListener('submit', this.onSubmit.bind(this));
+    this.form.addEventListener('submit', this.#onSubmit.bind(this));
   }
 
   name = 'add-user-form'
 
-  onSubmit(e) {
+  #onSubmit(e) {
     e.preventDefault();
 
     const name = this.nameInput?.value;

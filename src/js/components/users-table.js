@@ -2,10 +2,8 @@ class UsersTable {
   constructor(ctx) {
     this.table = document.getElementById(this.name);
     this.body = this.table.querySelector('tbody');
-    this.emptyString = document.getElementById('empty-table-info');
     this.ctx = ctx;
-
-    this.load();
+    this.#load();
   }
 
   fields =  ['name', 'phone']
@@ -14,24 +12,24 @@ class UsersTable {
 
   #currentEditUser = null;
 
-  async load() {
+  async #load() {
     await this.ctx.store.loadUsers();
-    this.renderAll();
+    this.#renderAll();
   }
 
-  renderAll() {
+  #renderAll() {
     this.body.innerHTML = '';
-    this.ctx.store.users.forEach(user => this.body.append( this.createRow(user) ));
+    this.ctx.store.users.forEach(user => this.body.append( this.#createRow(user) ));
   }
 
-  createCell(content) {
+  #createCell(content) {
     const cell = document.createElement('td');
     cell.classList.add('table__cell');
     cell.textContent = content;
     return cell;
   }
 
-  createInputCell(key, value) {
+  #createInputCell(key, value) {
     const cell = document.createElement('td');
     cell.classList.add('table__cell');
 
@@ -44,7 +42,7 @@ class UsersTable {
     return cell;
   }
 
-  createButton(content, method) {
+  #createButton(content, method) {
     const button = document.createElement('button');
     button.classList.add('button');
     button.textContent = content;
@@ -52,37 +50,33 @@ class UsersTable {
     return button;
   }
 
-  createButtonsCell(user, isEdit) {
+  #createButtonsCell(user, isEdit) {
     const cell = document.createElement('td');
     cell.className = 'table__cell table__cell-control';
 
     if (isEdit) {
-      cell.append(this.createButton('Сохранить', this.saveUser(user.id)));
-      cell.append(this.createButton('Отменить', this.setEditRow(user, false)));
+      cell.append(this.#createButton('Сохранить', this.#saveUser(user.id)));
+      cell.append(this.#createButton('Отменить', this.#setEditRow(user, false)));
     } else {
-      cell.append(this.createButton('Редактировать', this.setEditRow(user, true)));
-      cell.append(this.createButton('Удалить', this.deleteUser(user.id)));
+      cell.append(this.#createButton('Редактировать', this.#setEditRow(user, true)));
+      cell.append(this.#createButton('Удалить', this.#deleteUser(user.id)));
     }
 
     return cell;
   }
 
-  addRow(user) {
-    this.body.append(this.createRow(user));
-  }
-
-  createRow(user, isEdit = false) {
+  #createRow(user, isEdit = false) {
     const row = document.createElement('tr');
     row.classList.add('table__row');
     row.dataset.userId = user.id;
 
     this.fields.forEach(key => row.append(
       isEdit 
-        ? this.createInputCell(key, user[key])
-        : this.createCell(user[key])
+        ? this.#createInputCell(key, user[key])
+        : this.#createCell(user[key])
     ));
 
-    row.append(this.createButtonsCell(user, isEdit));
+    row.append(this.#createButtonsCell(user, isEdit));
     
     return row;
   }
@@ -91,9 +85,14 @@ class UsersTable {
     return this.body.querySelector(`.table__row[data-user-id=${CSS.escape(id)}]`);
   }
 
+  
+  addRow(user) {
+    this.body.append(this.#createRow(user));
+  }
+
   updateRow(user, isEdit) {
     const row = this.getRowById(user.id);
-    const newRow = this.createRow(user, isEdit);
+    const newRow = this.#createRow(user, isEdit);
     row.after(newRow);
     row.remove();
   }
@@ -103,7 +102,7 @@ class UsersTable {
     row.remove();
   }
 
-  setEditRow(user, isEdit) {
+  #setEditRow(user, isEdit) {
     return () => {
       this.ctx.store.clearErrors();
       if (this.#currentEditUser) this.updateRow(this.#currentEditUser, false);
@@ -113,14 +112,14 @@ class UsersTable {
     }
   }
 
-  deleteUser(id) {
+  #deleteUser(id) {
     return () => {
       if (this.#currentEditUser?.id === id) this.#currentEditUser = null;
       this.ctx.store.deleteUser(id);
     } 
   }
 
-  saveUser(id) {
+  #saveUser(id) {
     return async () => {
       const row = this.body.querySelector(`.table__row[data-user-id=${CSS.escape(id)}]`);
 
