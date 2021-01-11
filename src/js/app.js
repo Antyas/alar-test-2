@@ -1,35 +1,23 @@
 class App {
   constructor(modules, components) {
-    this.createContext(modules);
+    this.ctx = { components: {} };
+    this.registerModules(modules);
     this.registerComponents(components);
-  }
-
-  async run() {
-    await this.initComponents();
     this.ctx.logger.info('Аpp is running');
   }
 
-  createContext(modules) {
-    this.ctx = {};
-
+  registerModules(modules) {
     Object.values(modules).forEach(M => {
       const module = new M(this.ctx);
       this.ctx[module.name] = module;
     });
   }
 
-  async initComponents() {
-    const promices = Object.values(this.ctx.components).map(component => component.init());
-    await Promise.all(promices);
-  }
-
   registerComponents(components) {
-    const entries = Object.values(components).map(C => {
+    Object.values(components).forEach(C => {
       const component = new C(this.ctx);
-      return [component.name, component];
+      this.ctx.components[component.name] = component;
     });
-
-    this.ctx.components = Object.fromEntries(entries);
   }
 }
 

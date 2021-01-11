@@ -1,24 +1,22 @@
 class UsersTable {
   constructor(ctx) {
-    this.name = 'usersTable';
-    this.root = document.getElementById('user-table');
-    this.body = this.root.querySelector('tbody');
-    this.emptyString = document.getElementById('empty-string');
+    this.table = document.getElementById(this.name);
+    this.body = this.table.querySelector('tbody');
+    this.emptyString = document.getElementById('empty-table-info');
     this.ctx = ctx;
+
+    this.load();
   }
 
   fields =  ['name', 'phone']
 
-  async init() {
-    await this.ctx.store.loadUsers();
-    this.setEmptyTableString();
-    this.renderAll();
-  }
+  name = 'users-table'
 
-  setEmptyTableString() {
-    const { classList } = this.emptyString;
-    const className = 'empty-string--hide';
-    this.ctx.store.users.length ? classList.add(className) : classList.remove(className);
+  #currentEditUser = null;
+
+  async load() {
+    await this.ctx.store.loadUsers();
+    this.renderAll();
   }
 
   renderAll() {
@@ -54,16 +52,16 @@ class UsersTable {
     return button;
   }
 
-  createButtonsCell(row, isEdit) {
+  createButtonsCell(user, isEdit) {
     const cell = document.createElement('td');
     cell.className = 'table__cell table__cell-control';
 
     if (isEdit) {
-      cell.append(this.createButton('Сохранить', this.saveRow(row)));
-      cell.append(this.createButton('Отменить', this.setEditRow(row, false)));
+      cell.append(this.createButton('Сохранить', this.saveUser(user.id)));
+      cell.append(this.createButton('Отменить', this.setEditRow(user, false)));
     } else {
-      cell.append(this.createButton('Редактировать', this.setEditRow(row)));
-      cell.append(this.createButton('Удалить', this.deleteRow(row)));
+      cell.append(this.createButton('Редактировать', this.setEditRow(user, true)));
+      cell.append(this.createButton('Удалить', this.deleteUser(user.id)));
     }
 
     return cell;
@@ -84,44 +82,54 @@ class UsersTable {
         : this.createCell(user[key])
     ));
 
-    row.append(this.createButtonsCell(row, isEdit))
+    row.append(this.createButtonsCell(user, isEdit));
     
     return row;
   }
 
-  setEditRow(row, isEdit = true) {
+  getRowById(id) {
+    return this.body.querySelector(`.table__row[data-user-id=${CSS.escape(id)}]`);
+  }
+
+  updateRow(user, isEdit) {
+    const row = this.getRowById(user.id);
+    const newRow = this.createRow(user, isEdit);
+    row.after(newRow);
+    row.remove();
+  }
+
+  deleteRow(id) {
+    const row = this.getRowById(id);
+    row.remove();
+  }
+
+  setEditRow(user, isEdit) {
     return () => {
-      const user = this.ctx.store.getUserById(+row.dataset.userId);
-      const newRow = this.createRow(user, isEdit);
-      row.after(newRow);
-      row.remove();
+      this.ctx.store.clearErrors();
+      if (this.#currentEditUser) this.updateRow(this.#currentEditUser, false);
+      if (!isEdit) return;
+      this.updateRow(user, true);
+      this.#currentEditUser = user;
     }
   }
 
-  deleteRow(row) {
+  deleteUser(id) {
     return () => {
-      this.ctx.store
-        .deleteUser(+row.dataset.userId)
-        .then(() => { 
-          row.remove(); 
-          this.setEmptyTableString(); 
-        })
-        .catch(this.ctx.logger.error);
-    }
+      if (this.#currentEditUser?.id === id) this.#currentEditUser = null;
+      this.ctx.store.deleteUser(id);
+    } 
   }
 
-  saveRow(row) {
+  saveUser(id) {
     return async () => {
-      const user = {
-        phone: row.querySelector('input[data-key=phone]').value,
-        name: row.querySelector('input[data-key=name]').value,
-        id: +row.dataset.userId,
-      };
+      const row = this.body.querySelector(`.table__row[data-user-id=${CSS.escape(id)}]`);
+
+      const user = this.fields.reduce((res, key) => {
+        res[key] = row.querySelector(`.input[data-key=${key}]`).value;
+        return res;
+      }, { id });
 
       await this.ctx.store.updateUser(user);
-      const newRow = this.createRow(user);
-      row.after(newRow);
-      row.remove();
     }
   }
 }

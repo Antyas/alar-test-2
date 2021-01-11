@@ -3,6 +3,7 @@
 $layout-background: #f4f4f4;
 $element-background: #ffffff;
 $text: #3c3b3b;
+$error: #ff4444;
 $active: #2ebaae;
 $border: 1px solid #e3e3e3;
 
@@ -33,10 +34,20 @@ body {
   }
 }
 
-.empty-string {
+.empty-table-info {
   font-size: 20px;
   text-align: center;
   margin: 20px 0;
+
+  &--hide {
+    display: none;
+  }
+}
+
+.error-box {
+  margin: 20px 0;
+  color: $error;
+  text-align: center;
 
   &--hide {
     display: none;

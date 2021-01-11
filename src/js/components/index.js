@@ -1,7 +1,11 @@
 import UsersTable from './users-table';
-import Form from './form';
+import AddUserForm from './add-user-form';
+import ErrorBox from './error-box';
+import EmptyTableInfo from './empty-table-info';
 
 export default { 
   UsersTable,
-  Form
+  AddUserForm,
+  ErrorBox,
+  EmptyTableInfo,
 };

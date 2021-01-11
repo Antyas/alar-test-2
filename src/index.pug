@@ -8,7 +8,7 @@ html(lang="en")
   body
     .app
       .app__container
-        table#user-table.table
+        table#users-table.table
           thead.table__head
             tr.table__row
               th.table__cell Имя
@@ -16,14 +16,16 @@ html(lang="en")
               th.table__cell Управление
           tbody.table__body
 
-        p#empty-string.empty-string Данных нет
+        p#empty-table-info.empty-table-info Данных нет
 
-        .add-user
+        p#error-box.error-box.error-box--hide
+
+        form#add-user-form.add-user
           label.label
             | Имя
-            input.input
+            input.input(data-key="name")
           label.label
             | Телефон
-            input.input
-          button.button Добавить
+            input.input(data-key="phone")
+          button.button(type="submit") Добавить
     script(src="./js/main.js")
